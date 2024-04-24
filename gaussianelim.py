@@ -1,12 +1,13 @@
 import math
 import numpy as np
+import sys
 
 def solveable(linearmatrix):   #using numpy to check discriminant of matrix
     #converting to a 2d array for numpy
     size = math.floor(len(linearmatrix)**0.5)
     matrix = [[(linearmatrix[((size+1)*row)+col])for col in range(size)] for row in range(size)]
     det = np.linalg.det(matrix)
-    
+    return (det != 0) #true if it can be solved
     
     
 def clear(): #for display
@@ -87,6 +88,10 @@ print("how many unknowns do you want to solve for? (max 52 to label variables)")
 unknowns = int(input())
 
 system = fillmatrix(unknowns, variableNames)  #user inputs matrix here
+
+if not solveable(system):
+    print("this system of equations does not have a solution")
+    sys.exit()
 
 for i in range(unknowns-1):
     for j in range(i+1, (unknowns)):
