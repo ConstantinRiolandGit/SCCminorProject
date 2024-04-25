@@ -22,7 +22,7 @@ def fillmatrix(unknowns, variableNames):
         row = coordinate//unknowns
         column = coordinate%(unknowns+1)
         print("enter the next value for index ", column+1, " in row ", row)
-        matrix[coordinate] = int(input())
+        matrix[coordinate] = float(input())
         clear()
         printequation(matrix, variableNames)
         #print(matrix)
@@ -32,22 +32,39 @@ def fillmatrix(unknowns, variableNames):
             
 def printequation(linearmatrix, variableNames):
     size = math.floor(len(linearmatrix)**0.5)
-    print()
+    print("\nOur system of equations is now:\n")
     for i in range(len(linearmatrix)):
         currentcol = i%(size+1)
         currentvalue = linearmatrix[i]
         if currentcol != size:
-            if currentvalue>0:
+            if currentvalue>0 and currentcol!=0:
                 print(" + ", currentvalue, variableNames[currentcol], end="")
-            if currentvalue<0:
+            if currentvalue<0 and currentcol!=0:
                 print(" - ", abs(currentvalue), variableNames[currentcol], end="")  #checking to see if we write + or - before the next entry
-            if currentvalue==0:
+            if currentvalue==0 and currentcol!=0:
                 print(" + 0   ", end="")
+            if currentcol==0 and currentvalue !=0:
+                print(currentvalue, variableNames[currentcol], end="")
+            if currentcol==0 and currentvalue==0:
+                print(" 0 ", end="")
         else:
             print(" = ", currentvalue)
+    
+    print("\nAnd the augmented Matrix is:\n")
+    for row in range(size):
+        print("|", end="")
+        for entry in range(size):
+            if entry==0:
+                print(linearmatrix[row*(size+1)+entry], end="")
+            else:
+                print(" , ", linearmatrix[(row*(size+1))+entry], end="")
+        print(" | ", linearmatrix[(row*(size+1))+size], " |")
+    print()
 
 def makezero(matrix, row1, row2, index):
     size = math.floor(len(matrix)**0.5)
+    if matrix[(row2*(size+1))+index]==0:
+        return matrix
     coefficient = -(matrix[(row2*(size+1))+index])/matrix[(row1*(size+1))+index]    #this is what we multiply the row by to cancel the required entry
     print()
     print("we will add ", coefficient, " times row ", row1+1, " to row ", row2+1)
