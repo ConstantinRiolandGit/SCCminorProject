@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import sys
+import random
 
 def solveable(linearmatrix):   #using numpy to check discriminant of matrix
     #converting to a 2d array for numpy
@@ -101,27 +102,119 @@ variableNames = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"     #all 
                                                                            #we could set this to other stuff like xyzabcpqrfghk, etc
                                                                          
 
-print("how many unknowns do you want to solve for? (max 52 to label variables)") #only really limited by the amount of characters we can use to represent variables
-unknowns = int(input())
+def customsolve(variableNames):
+    clear()
+    print("how many unknowns do you want to solve for? (max 52 to label variables)") #only really limited by the amount of characters we can use to represent variables
+    unknowns = int(input())
 
-system = fillmatrix(unknowns, variableNames)  #user inputs matrix here
+    system = fillmatrix(unknowns, variableNames)  #user inputs matrix here
 
-if not solveable(system):
-    print("this system of equations does not have a solution")
-    sys.exit()
+    if not solveable(system):
+        print("this system of equations does not have a solution")
+        sys.exit()
 
-for i in range(unknowns-1):
-    for j in range(i+1, (unknowns)):
-        if system[((unknowns+1)*j)+i] != 0:
-            system = makezero(system, i, j, i)
-            printequation(system, variableNames)  #creates 0 under the leading diagonal, allowing for back substitution
+    for i in range(unknowns-1):
+        for j in range(i+1, (unknowns)):
+            if system[((unknowns+1)*j)+i] != 0:
+                system = makezero(system, i, j, i)
+                printequation(system, variableNames)  #creates 0 under the leading diagonal, allowing for back substitution
 
-for i in range(1, unknowns):
-    system = backsubstitute(system, unknowns-i, unknowns-i, variableNames)  #back-substitutes variables starting with the last one, ends up with only one variable per row and ready for solving
-    printequation(system, variableNames)
+    for i in range(1, unknowns):
+        system = backsubstitute(system, unknowns-i, unknowns-i, variableNames)  #back-substitutes variables starting with the last one, ends up with only one variable per row and ready for solving
+        printequation(system, variableNames)
 
-displayResults(system, variableNames)
+    displayResults(system, variableNames)
 
+def manualsub(matrix):
+    size = math.floor(len(matrix)**0.5)
+    print("what row do you want to add (number 1-", size, ")?")
+    startrow = int(input())-1
+    print("what coefficient do you want to multiply it by before adding?")
+    coefficient = float(input())
+    print("what row do you want to add it to? (number 1-", size, ")?")
+    endrow = int(input())-1
+    
+    for i in range(size+1):
+        matrix[(endrow*(size+1))+i] += coefficient*matrix[(startrow*(size+1))+i]
+    printequation(matrix, variableNames)
+    return matrix
+
+def makehint(matrix):
+    size = math.floor(len(matrix)**0.5)
+    #check if part 1 of the process is done correctly
+    for i in range(size):
+        for j in range(i):
+            if matrix[(i*(size+1))+j] != 0:
+                #print(matrix[(i*(size+1))+j])
+                return "Hint: try to only have zeroes under the leading diagonal!"
+    
+    
+    for i in range(size):
+        for j in range(i+1, size+1):
+            if matrix[(i*(size+1))+j] != 0:
+                #print(matrix[(i*(size+1))+j])
+                return "Substitute rows from the bottom to only have zeroes above the leading diagonal (look for rows with only one value)"
+  
+    return "solved" #using this as a solved checker since it has everything required
+    
+    
+    
+    
+    
+    
+    
+def manualsolve(variableNames):
+    clear()
+    print("how many unknowns do you want to solve for? (max 52 to label variables)") #only really limited by the amount of characters we can use to represent variables
+    unknowns = int(input())
+
+    system = fillmatrix(unknowns, variableNames)  #user inputs matrix here
+    solved = False
+    while not solved:
+        
+        manualsub(system)
+        
+        
+        print("enter 1 to get a hint, otherwise press enter to continue...")
+        hint = input()
+        if hint == "1":
+            print(makehint(system))
+        
+        if makehint(system) == "solved": #using this as a solved checker since it has everything required
+            solved = True
+        
+def generateMatrix(unknowns):
+    linearmat = [0]*(unknowns*(unknowns+1))
+    
+    #generate variables
+    variables = []*unknowns
+    for i in range(unknowns):
+        variables[i] = random.randint(1, 9)
+    #generate coefficients
+    for row in range(unknowns):
+        for i in range(unknowns):
+            coefficient = random.randint(1, 9)
+            linearmat[(row*(unknowns+1))+i] = coefficient
+            linearmat[(row*(unknowns+1))+unknowns] += coefficient*variables[i]
+        
+        
+def menu():
+    clear()
+    print("what would you like to do?")
+    print("1. Auto solve simultaneous equations")
+    print("2. Solve yourself")
+    print("3. Generate a practice problem")
+    print("4. Explanation")
+    choice = input()
+    if choice == "1":
+        customsolve(variableNames)
+    elif choice == "2":
+        manualsolve(variableNames)
+    else:
+        menu()
+
+
+menu()
 
 
 
