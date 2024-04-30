@@ -187,17 +187,48 @@ def generateMatrix(unknowns):
     linearmat = [0]*(unknowns*(unknowns+1))
     
     #generate variables
-    variables = []*unknowns
+    variables = [0]*unknowns
     for i in range(unknowns):
-        variables[i] = random.randint(1, 9)
+        variables[i] = random.randint(-9, 9)
     #generate coefficients
     for row in range(unknowns):
         for i in range(unknowns):
             coefficient = random.randint(1, 9)
             linearmat[(row*(unknowns+1))+i] = coefficient
             linearmat[(row*(unknowns+1))+unknowns] += coefficient*variables[i]
+    printequation(linearmat, variableNames)
+    return linearmat
+
+
+def Practice():
+    clear()
+    print("how many unknowns do you want to solve for? (max 52 to label variables)") #only really limited by the amount of characters we can use to represent variables
+    unknowns = int(input())
+
+    system = generateMatrix(unknowns)
+    solved = False
+    while not solved:
+        
+        manualsub(system)
         
         
+        print("enter 1 to get a hint, otherwise press enter to continue...")
+        hint = input()
+        if hint == "1":
+            print(makehint(system))
+        
+        if makehint(system) == "solved": #using this as a solved checker since it has everything required
+            solved = True
+
+def explain():
+    clear()
+    print("message here ")
+    print("Press anything to return to menu")
+    input()
+    menu()
+    
+    
+    
 def menu():
     clear()
     print("what would you like to do?")
@@ -210,6 +241,10 @@ def menu():
         customsolve(variableNames)
     elif choice == "2":
         manualsolve(variableNames)
+    elif choice == "3":
+        Practice()
+    elif choice == "4":
+        explain()
     else:
         menu()
 
