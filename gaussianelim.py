@@ -124,6 +124,10 @@ def customsolve(variableNames):
         printequation(system, variableNames)
 
     displayResults(system, variableNames)
+    print("\nPress x to exit, or any key to return to menu")
+    choice = input()
+    if choice != "x":
+        menu()
 
 def manualsub(matrix):
     size = math.floor(len(matrix)**0.5)
@@ -182,6 +186,11 @@ def manualsolve(variableNames):
         
         if makehint(system) == "solved": #using this as a solved checker since it has everything required
             solved = True
+    
+    print("\nPress x to exit, or any key to return to menu")
+    choice = input()
+    if choice != "x":
+        menu()
         
 def generateMatrix(unknowns):
     linearmat = [0]*(unknowns*(unknowns+1))
@@ -219,10 +228,41 @@ def Practice():
         
         if makehint(system) == "solved": #using this as a solved checker since it has everything required
             solved = True
-
+    
+    print("\nPress x to exit, or any key to return to menu")
+    choice = input()
+    if choice != "x":
+        menu()
+    
 def explain():
     clear()
-    print("message here ")
+    print("Gaussian elimination is a method to solve linear simultaneous equations, using ")
+    print("concepts from Linear Algebra. It is sometimes also called row reduction.\n")
+    print("As an example, we will solve the equations:\n")
+    print(" a + 2b = 5")
+    print("3a + 3b = 9\n")
+    print("We start by creating an \"augmented matrix\" which is a matrix of coefficients for")
+    print("our linear equations, with an extra column vector for our constants. The Idea is that")
+    print("we could simply multiply the column vector by the inverse of the matrix, to obtain")
+    print("a vector with the solutions to our equations. You can think of Gaussian elimination ")
+    print("also as a way to invert a matrix (when it is possible). In this case we write:\n")
+    print("[ 1, 2 | 5]")
+    print("[ 3, 3 | 9]\n")
+    print("We begin by making all the entries under the leading diagonal zero, so we add -3")
+    print("times row 1 to row 2.\n")
+    print(" a + 2b = 5")
+    print(" 0 - 3b = -6\n")
+    print("[ 1,  2 |  5]")
+    print("[ 0, -3 | -6]\n")
+    print("Now we have a value for b which we can substitute into all rows\n")
+    print(" a + 0 = 1")
+    print(" 0 + b = 2\n")
+    print("[ 1, 0 | 1]")
+    print("[ 0, 0 | 2]\n")
+    print("This now obviously yields:")
+    print("a = 1")
+    print("b = 2")
+    print("\n")
     print("Press anything to return to menu")
     input()
     menu()
