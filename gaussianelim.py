@@ -133,8 +133,13 @@ def manualsub(matrix):
     size = math.floor(len(matrix)**0.5)
     print("what row do you want to add (number 1-", size, ")?")
     startrow = int(input())-1
-    print("what coefficient do you want to multiply it by before adding?")
-    coefficient = float(input())
+    print("what coefficient do you want to multiply it by before adding?  (fractions can be written as a/b)")
+    coefficient = input()
+    if "/" in coefficient:
+        coefficientlist = coefficient.split("/")
+        coefficient = float(coefficientlist[0])/float(coefficientlist[1])
+    else:
+        coefficient = float(coefficient)
     print("what row do you want to add it to? (number 1-", size, ")?")
     endrow = int(input())-1
     
